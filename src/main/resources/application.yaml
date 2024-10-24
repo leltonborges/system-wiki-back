@@ -1,0 +1,22 @@
+quarkus:
+  application:
+    name: System-wiki
+
+  mongodb:
+    connection-string: mongodb://root:example@localhost:27017/system-wiki?authSource=admin
+    database: system-wiki
+
+  jackson:
+    write-dates-as-timestamps: true
+
+  smallrye-openapi:
+    enable: true
+    info:
+      title: demo
+      description: "Abc"
+    path: "/openapi"
+
+  swagger-ui:
+    enable: true
+    path: "/swagger-ui"
+
