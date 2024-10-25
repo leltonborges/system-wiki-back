@@ -2,6 +2,7 @@ package org.wiki.system.resource
 
 
 import jakarta.validation.Valid
+import jakarta.validation.constraints.Size
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
@@ -52,7 +53,9 @@ class ArticleResource {
     @GET
     @Path("/search")
     @Produces(MediaType.APPLICATION_JSON)
-    fun search(@QueryParam("keyword") keyword: String,
+    fun search(@Valid
+               @Size(min = 5, message = "Tamanho mínimo esperado é de 5 caracteres")
+               @QueryParam("keyword") keyword: String,
                @QueryParam("page") page: Int = 0,
                @QueryParam("size") size: Int = 10): Response {
         val articles =
