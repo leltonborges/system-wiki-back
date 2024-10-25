@@ -19,7 +19,7 @@ data class ArticleDataDetail(
     val dtCreate: LocalDate,
     val dtLastUpdate: LocalDate,
     val yearMonth: Int
-                            ) {
+) {
     constructor(article: Article) : this(
         article.id!!,
         article.title,
@@ -33,5 +33,5 @@ data class ArticleDataDetail(
         article.dtCreate,
         article.dtLastUpdate,
         article.yearMonth
-                                        );
+    );
 }

@@ -24,44 +24,64 @@ class ArticleResource {
         val newArticle = article.toArticle();
         Article.persist(newArticle)
         return Response.ok(newArticle.toDetail())
-                .build();
+            .build();
     }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun findById(@Valid
-                 @ValidId(message = "O tamanho esperado é de 24 caracteres", size = 24)
-                 @PathParam("id") id: String): Response {
+    fun findById(
+        @Valid
+        @ValidId(message = "O tamanho esperado é de 24 caracteres", size = 24)
+        @PathParam("id") id: String
+    ): Response {
         val article = Article.findById(ObjectId(id)) ?: return Response.status(Response.Status.NOT_FOUND)
-                .build()
+            .build()
         return Response.ok(ArticleDataDetail(article))
-                .build()
+            .build()
     }
 
     @GET
-    @Path("/list")
+    @Path("/list/all")
     @Produces(MediaType.APPLICATION_JSON)
-    fun listAll(@QueryParam("page") page: Int = 0,
-                @QueryParam("size") pageSize: Int = 20): Response {
+    fun listAll(
+        @QueryParam("page") page: Int = 0,
+        @QueryParam("size") pageSize: Int = 20
+    ): Response {
         val response = Article.findAll()
-                .toPaginatedResponse(page, pageSize, Article::toDetail)
+            .toPaginatedResponse(page, pageSize, Article::toDetail)
         return Response.ok(response)
-                .build();
+            .build();
+    }
+
+    @GET
+    @Path("/list/status/{status}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun listAllByStatus(
+        @PathParam("status") status: Int,
+        @QueryParam("page") page: Int = 0,
+        @QueryParam("size") pageSize: Int = 20
+    ): Response {
+        val response = Article.findByStatus(status)
+            .toPaginatedResponse(page, pageSize, Article::toDetail)
+        return Response.ok(response)
+            .build();
     }
 
     @GET
     @Path("/search")
     @Produces(MediaType.APPLICATION_JSON)
-    fun search(@Valid
-               @Size(min = 5, message = "Tamanho mínimo esperado é de 5 caracteres")
-               @QueryParam("keyword") keyword: String,
-               @QueryParam("page") page: Int = 0,
-               @QueryParam("size") size: Int = 10): Response {
+    fun search(
+        @Valid
+        @Size(min = 5, message = "Tamanho mínimo esperado é de 5 caracteres")
+        @QueryParam("keyword") keyword: String,
+        @QueryParam("page") page: Int = 0,
+        @QueryParam("size") size: Int = 10
+    ): Response {
         val articles =
             Article.findBySearch(keyword)
-                    .toPaginatedResponse(page, size, Article::toDetail)
+                .toPaginatedResponse(page, size, Article::toDetail)
         return Response.ok(articles)
-                .build()
+            .build()
     }
 }

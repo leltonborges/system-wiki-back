@@ -8,6 +8,6 @@ data class TagDataDetail(
     val name: String,
     val status: Int,
     val description: String
-                        ) {
+) {
     constructor(tag: Tag) : this(tag.id!!, tag.name, tag.status, tag.description)
 }

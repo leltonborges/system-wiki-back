@@ -35,7 +35,7 @@ class AuthorResource {
     }
 
     @GET
-    @Path("/list")
+    @Path("/list/all")
     fun findAllPage(@QueryParam("page") page: Int = 0,
                     @QueryParam("size") size: Int = 10): Response {
         val response = Author.findAll()

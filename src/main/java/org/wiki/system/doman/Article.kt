@@ -34,6 +34,10 @@ class Article() : PanacheMongoEntity() {
     }
 
     companion object : PanacheMongoCompanion<Article> {
+        fun findByStatus(status: Int): PanacheQuery<Article> {
+            return find("status", status)
+        }
+
         fun findBySearch(keyword: String): PanacheQuery<Article> {
             val regex = "(?i).*${keyword}.*"
             return find(
