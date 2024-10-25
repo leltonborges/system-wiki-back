@@ -11,9 +11,9 @@ data class ArticleDataNew @JsonCreator constructor(
     @JsonProperty("resume") val resume: String? = null,
     @JsonProperty("content") val content: String,
     @JsonProperty("linkImg") val linkImg: String,
-    @JsonProperty("idAuthor") val idAuthor: Long,
-    @JsonProperty("status") val status: Int,
-    @JsonProperty("idTag") val idTag: Long,
+    @JsonProperty("idAuthor") val idAuthor: String,
+    @JsonProperty("status") val status: String,
+    @JsonProperty("idTag") val idTag: String,
     @JsonProperty("dtPublish") val dtPublish: LocalDate,
     @JsonProperty("dtCreate") val dtCreate: LocalDate,
     @JsonProperty("dtLastUpdate") val dtLastUpdate: LocalDate

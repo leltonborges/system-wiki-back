@@ -9,6 +9,7 @@ import jakarta.ws.rs.core.Response
 import org.bson.types.ObjectId
 import org.wiki.system.doman.Article
 import org.wiki.system.record.ArticleDataNew
+import org.wiki.system.validator.ValidId
 
 @Path("/article")
 class ArticleResource {
@@ -17,28 +18,22 @@ class ArticleResource {
     @Path("/save")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    fun saveNewPerson(@Valid article: ArticleDataNew): Response {
+    fun saveNewPerson(article: ArticleDataNew): Response {
         val newArticle = article.toArticle();
         Article.persist(newArticle)
-        return Response.ok(newArticle).build();
+        return Response.ok(newArticle.toDetail()).build();
     }
-
-//    @POST
-//    @Path("/save2")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    fun saveNewPerson2(@Valid article: Article): Response {
-//        Article.persist(article);
-//        return Response.ok(article).build();
-//    }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     fun findById(
+        @Valid
+        @ValidId(message = "O tamanho esperado é de 24 caracteres", size = 24)
         @PathParam("id") id: String
-    ): Article? {
-        return Article.findById(ObjectId(id))
+    ): Response {
+        val article = Article.findById(ObjectId(id)) ?: return Response.status(Response.Status.NOT_FOUND).build()
+        return Response.ok(article.toDetail()).build()
     }
 
     @GET
@@ -47,8 +42,9 @@ class ArticleResource {
     fun listAll(
         @QueryParam("page") page: Int = 0,
         @QueryParam("size") pageSize: Int = 20
-    ): List<Article> {
-        return Article.findAll().page(page, pageSize).list();
+    ): Response {
+        val details = Article.findAll().page(page, pageSize).list().map { it.toDetail() }
+        return Response.ok(details).build();
     }
 
     @GET
@@ -58,7 +54,8 @@ class ArticleResource {
         @QueryParam("keyword") keyword: String,
         @QueryParam("page") page: Int = 0,
         @QueryParam("size") size: Int = 10,
-    ): List<Article> {
-        return Article.findByTitleOrContent(keyword, Page(page, size))
+    ): Response {
+        val articles = Article.findByTitleOrContent(keyword, Page(page, size)).map { it.toDetail() }
+        return Response.ok(articles).build()
     }
 }

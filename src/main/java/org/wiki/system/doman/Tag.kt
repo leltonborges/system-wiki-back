@@ -4,12 +4,10 @@ import io.quarkus.mongodb.panache.common.MongoEntity
 import io.quarkus.mongodb.panache.kotlin.PanacheMongoCompanion
 import io.quarkus.mongodb.panache.kotlin.PanacheMongoEntity
 
-@MongoEntity(collection = "doc_status_article")
-class StatusArticle : PanacheMongoEntity() {
+@MongoEntity(collection = "doc_tag")
+class Tag() : PanacheMongoEntity() {
     lateinit var name: String
     lateinit var description: String
 
-    companion object : PanacheMongoCompanion<StatusArticle> {
-
-    }
+    companion object : PanacheMongoCompanion<Tag> {}
 }
