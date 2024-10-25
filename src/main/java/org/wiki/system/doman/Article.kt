@@ -4,13 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import io.quarkus.mongodb.panache.common.MongoEntity
 import io.quarkus.mongodb.panache.kotlin.PanacheMongoCompanion
 import io.quarkus.mongodb.panache.kotlin.PanacheMongoEntity
-import io.quarkus.panache.common.Page
+import io.quarkus.mongodb.panache.kotlin.PanacheQuery
 import org.bson.types.ObjectId
 import org.wiki.system.record.ArticleDataDetail
-import org.wiki.system.record.ArticleDataNew
-import org.wiki.system.util.formatYearMonth
 import java.time.LocalDate
-import java.time.YearMonth
 
 @MongoEntity(collection = "doc_article")
 class Article() : PanacheMongoEntity() {
@@ -19,7 +16,7 @@ class Article() : PanacheMongoEntity() {
     lateinit var content: String
     lateinit var linkImg: String
     lateinit var idAuthor: ObjectId
-    lateinit var status: ObjectId
+    var status: Int = 0
     lateinit var idTag: ObjectId
     var yearMonth: Int = 0
 
@@ -32,39 +29,12 @@ class Article() : PanacheMongoEntity() {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     lateinit var dtLastUpdate: LocalDate
 
-    constructor(data: ArticleDataNew) : this() {
-        this.title = data.title
-        this.resume = data.resume ?: ""
-        this.content = data.content
-        this.linkImg = data.linkImg
-        this.status = ObjectId(data.status)
-        this.idAuthor = ObjectId(data.idAuthor)
-        this.idTag = ObjectId(data.idTag)
-        this.dtPublish = data.dtPublish
-        this.dtCreate = data.dtCreate
-        this.dtLastUpdate = data.dtLastUpdate
-        this.yearMonth = formatYearMonth(YearMonth.now())
-    }
-
     fun toDetail(): ArticleDataDetail {
-        return ArticleDataDetail(
-            id = this.id!!,
-            title,
-            resume,
-            content,
-            linkImg,
-            authorName = Author.findById(this.idAuthor)?.name ?: "DESCONHECIDO",
-            status = StatusArticle.findById(this.status)?.name ?: "DESCONHECIDO",
-            tagName = Tag.findById(this.idTag)?.name ?: "DESCONHECIDO",
-            dtPublish,
-            dtCreate,
-            dtLastUpdate,
-            yearMonth
-        )
+        return ArticleDataDetail(this)
     }
 
     companion object : PanacheMongoCompanion<Article> {
-        fun findByTitleOrContent(keyword: String, page: Page): List<Article> {
+        fun findBySearch(keyword: String): PanacheQuery<Article> {
             val regex = "(?i).*${keyword}.*"
             return find(
                 "{ \$or: [                          " +
@@ -73,8 +43,6 @@ class Article() : PanacheMongoEntity() {
                         "   { content: { \$regex: ?1 } }    " +
                         "   ] }                             ", regex
             )
-                .page(page)
-                .list()
         }
 
         fun findByDateRangeAndStatus(startDate: LocalDate, endDate: LocalDate, status: Int): List<Article> {
