@@ -8,7 +8,7 @@ import org.bson.types.ObjectId
 import org.wiki.system.doman.Author
 import org.wiki.system.record.AuthorDataNew
 import org.wiki.system.resource.response.toPaginatedResponse
-import org.wiki.system.validator.ValidId
+import org.wiki.system.validator.IdValid
 
 @Path("/author")
 class AuthorResource {
@@ -26,8 +26,10 @@ class AuthorResource {
 
     @GET
     @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     fun findById(@Valid
-                 @ValidId(message = "O tamanho esperado é de 24 caracteres", size = 24)
+                 @IdValid
                  @PathParam("id") id: String): Response {
         return Response.ok(Author.findById(ObjectId(id))
                                    ?.toDetail())
@@ -36,6 +38,8 @@ class AuthorResource {
 
     @GET
     @Path("/list/all")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     fun findAllPage(@QueryParam("page") page: Int = 0,
                     @QueryParam("size") size: Int = 10): Response {
         val response = Author.findAll()

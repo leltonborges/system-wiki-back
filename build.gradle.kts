@@ -26,7 +26,6 @@ dependencies {
     implementation("io.quarkus:quarkus-resteasy-client-jackson")
     implementation("io.quarkus:quarkus-resteasy-client")
     implementation("io.quarkus:quarkus-resteasy-links")
-    implementation("io.quarkus:quarkus-hal")
     implementation("io.quarkus:quarkus-mongodb-panache-kotlin")
     implementation("io.quarkus:quarkus-mongodb-client")
     implementation("io.quarkus:quarkus-hibernate-validator")

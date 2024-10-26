@@ -1,28 +1,46 @@
 package org.wiki.system.record
 
 
-import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Size
 import org.bson.types.ObjectId
+import org.hibernate.validator.constraints.URL
 import org.wiki.system.doman.Article
 import org.wiki.system.doman.Author
 import org.wiki.system.doman.Tag
 import org.wiki.system.util.formatYearMonth
+import org.wiki.system.validator.IdValid
+import org.wiki.system.validator.OptionalMinSizeValid
 import java.time.LocalDate
 import java.time.YearMonth
 
-data class ArticleDataNew @JsonCreator constructor(
-    @JsonProperty("title") val title: String,
-    @JsonProperty("resume") val resume: String? = null,
-    @JsonProperty("content") val content: String,
-    @JsonProperty("linkImg") val linkImg: String,
-    @JsonProperty("idAuthor") val idAuthor: String,
-    @JsonProperty("status") val status: Int,
-    @JsonProperty("idTag") val idTag: String,
-    @JsonProperty("dtPublish") val dtPublish: LocalDate,
-    @JsonProperty("dtCreate") val dtCreate: LocalDate,
-    @JsonProperty("dtLastUpdate") val dtLastUpdate: LocalDate
-) {
+class ArticleDataNew {
+    @Size(min = 5, max = 100, message = "Title size must be between 5 and 100")
+    @JsonProperty("title")
+    lateinit var title: String
+
+    @OptionalMinSizeValid(min = 10, message = "Resume size must be greater than 10")
+    @JsonProperty("resume")
+    lateinit var resume: String
+
+    @Size(min = 20, message = "Content size must be greater than 20")
+    @JsonProperty("content")
+    lateinit var content: String
+
+    @JsonProperty("linkImg")
+    @NotBlank(message = "LinkImg is not null")
+    @URL(message = "LinkImg must be valid url")
+    lateinit var linkImg: String
+
+    @IdValid
+    @JsonProperty("idAuthor")
+    lateinit var idAuthor: String;
+
+    @IdValid
+    @JsonProperty("idTag")
+    lateinit var idTag: String
+
     fun toArticle(): Article {
         val tagId = ObjectId(this@ArticleDataNew.idTag)
         val authorId = ObjectId(this@ArticleDataNew.idAuthor)
@@ -35,12 +53,12 @@ data class ArticleDataNew @JsonCreator constructor(
             this.resume = this@ArticleDataNew.resume ?: ""
             this.content = this@ArticleDataNew.content
             this.linkImg = this@ArticleDataNew.linkImg
-            this.status = this@ArticleDataNew.status
             this.idAuthor = authorId
             this.idTag = tagId
-            this.dtPublish = this@ArticleDataNew.dtPublish
-            this.dtCreate = this@ArticleDataNew.dtCreate
-            this.dtLastUpdate = this@ArticleDataNew.dtLastUpdate
+            this.status = 1
+            this.dtPublish = LocalDate.now()
+            this.dtCreate = LocalDate.now()
+            this.dtLastUpdate = LocalDate.now()
             this.yearMonth = formatYearMonth(YearMonth.now())
         }
     }

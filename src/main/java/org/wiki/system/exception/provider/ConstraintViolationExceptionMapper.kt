@@ -16,7 +16,7 @@ class ConstraintViolationExceptionMapper(@Context val uriInfo: UriInfo) :
         val fields = exception.constraintViolations.map { field ->
             FieldMessage(
                 field.constraintDescriptor.annotation.annotationClass.simpleName ?: "Unknown",
-                field.propertyPath.toString(),
+                field.propertyPath.lastOrNull()?.name ?: "Unknown",
                 field.message,
                 field.invalidValue
             )

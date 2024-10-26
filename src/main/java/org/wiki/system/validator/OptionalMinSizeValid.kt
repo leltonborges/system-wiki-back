@@ -5,10 +5,10 @@ import kotlin.reflect.KClass
 
 @Target(AnnotationTarget.FIELD, AnnotationTarget.VALUE_PARAMETER)
 @Retention(AnnotationRetention.RUNTIME)
-@Constraint(validatedBy = [ObjectIdValidator::class])
-annotation class ValidId(
-    val message: String = "ID invalid",
-    val size: Int,
+@Constraint(validatedBy = [OptionalMinSizeValidator::class])
+annotation class OptionalMinSizeValid(
+    val message: String = "If provided, resume must be at least the minimum length",
+    val min: Int,
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<*>> = []
 )

@@ -6,9 +6,9 @@ import jakarta.validation.ConstraintValidatorContext
 import org.bson.types.ObjectId
 
 @ApplicationScoped
-class ObjectIdValidator : ConstraintValidator<ValidId, String> {
+class ObjectIdValidator : ConstraintValidator<org.wiki.system.validator.IdValid, String> {
     private var size: Int = 0
-    override fun initialize(constraint: ValidId) {
+    override fun initialize(constraint: org.wiki.system.validator.IdValid) {
         this.size = constraint.size
     }
 

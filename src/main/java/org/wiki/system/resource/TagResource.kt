@@ -6,8 +6,9 @@ import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
 import org.bson.types.ObjectId
 import org.wiki.system.doman.Tag
+import org.wiki.system.record.TagDataNew
 import org.wiki.system.resource.response.toPaginatedResponse
-import org.wiki.system.validator.ValidId
+import org.wiki.system.validator.IdValid
 
 @Path("/tag")
 class TagResource {
@@ -16,39 +17,67 @@ class TagResource {
     @Path("/new")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    fun newAuthor(tag: Tag): Response {
-        tag.persist()
-        return Response.ok(tag)
-                .build();
+    fun newAuthor(@Valid tagNew: TagDataNew): Response {
+        val tag = tagNew.toTag()
+        tag.save()
+        return Response.ok(tag.toDetail()).build();
     }
 
     @GET
     @Path("/{id}")
-    fun findById(@Valid
-                 @ValidId(message = "O tamanho esperado é de 24 caracteres", size = 24)
-                 @PathParam("id") id: String): Response {
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    fun findById(
+        @Valid
+        @IdValid
+        @PathParam("id") id: String
+    ): Response {
         return Response.ok(Tag.findById(ObjectId(id)))
-                .build()
+            .build()
     }
 
     @GET
     @Path("/list/all")
-    fun findAllPage(@QueryParam("page") page: Int = 0,
-                    @QueryParam("size") size: Int = 10): Response {
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    fun findAllPage(
+        @QueryParam("page") page: Int = 0,
+        @QueryParam("size") size: Int = 10
+    ): Response {
         val response = Tag.findAll()
-                .toPaginatedResponse(page, size, Tag::toDetail)
+            .toPaginatedResponse(page, size, Tag::toDetail)
         return Response.ok(response)
-                .build()
+            .build()
     }
 
     @GET
     @Path("/list/status/{status}")
-    fun findAllPage(@PathParam("status") status: Int,
-                    @QueryParam("page") page: Int = 0,
-                    @QueryParam("size") size: Int = 10): Response {
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    fun findAllPage(
+        @PathParam("status") status: Int,
+        @QueryParam("page") page: Int = 0,
+        @QueryParam("size") size: Int = 10
+    ): Response {
         val response = Tag.findByStatus(status)
-                .toPaginatedResponse(page, size, Tag::toDetail)
+            .toPaginatedResponse(page, size, Tag::toDetail)
         return Response.ok(response)
-                .build()
+            .build()
+    }
+
+    @PATCH
+    @Path("/{id}/name")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    fun editName(
+        @Valid
+        @IdValid
+        @PathParam("id") id: String,
+        @QueryParam("name") name: String
+    ): Response {
+        val tag = Tag.findById(ObjectId(id))
+        tag?.name = name
+        tag?.modify()
+        return Response.ok(tag?.toDetail()).build()
     }
 }

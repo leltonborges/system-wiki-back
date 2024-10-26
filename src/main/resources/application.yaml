@@ -2,9 +2,14 @@ quarkus:
   application:
     name: System-wiki
 
+  http:
+    cors:
+      ~: true
+      origins: /.*/
+
   mongodb:
-    connection-string: mongodb://root:example@localhost:27017/system-wiki?authSource=admin
-    database: system-wiki
+    connection-string: ${MONGODB_URL:mongodb://root:example@localhost:27017/system-wiki?authSource=admin}
+    database: ${MONGODB_DATABASE:system-wiki}
 
   jackson:
     write-dates-as-timestamps: true
@@ -19,4 +24,3 @@ quarkus:
   swagger-ui:
     enable: true
     path: "/swagger-ui"
-
