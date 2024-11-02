@@ -9,6 +9,7 @@ import org.bson.types.ObjectId
 import org.wiki.system.record.ArticleDataDetail
 import org.wiki.system.resource.params.FilterArticleParams
 import java.time.LocalDate
+import java.util.*
 
 @MongoEntity(collection = "doc_article")
 class Article() : PanacheMongoEntity() {
@@ -36,40 +37,41 @@ class Article() : PanacheMongoEntity() {
 
     companion object : PanacheMongoCompanion<Article> {
         fun findByStatusAndFilter(status: Int, filter: FilterArticleParams): PanacheQuery<Article> {
-            val queryConditions = mutableListOf<String>()
-            val queryParameters = mutableMapOf<String, Any>()
+            val query = StringJoiner(" and ");
+            val parameters = mutableMapOf<String, Any>()
 
-            queryConditions.add("status = :status")
-            queryParameters["status"] = status
-
+            query.add("status = :status")
+            parameters["status"] = status
 
             filter.title?.let {
-                queryConditions.add("title like :title")
-                queryParameters["title"] = "%${it}%"
+                query.add("title like :title")
+                parameters["title"] = "%${it}%"
             }
 
             filter.tagId?.let {
-                queryConditions.add("idTag = :tagId")
-                queryParameters["tagId"] = ObjectId(it)
+                query.add("idTag = :tagId")
+                parameters["tagId"] = ObjectId(it)
             }
 
             filter.endDate.let {
-                queryConditions.add("yearMonth <= :endDate")
-                queryParameters["endDate"] = it
+                query.add("yearMonth <= :endDate")
+                parameters["endDate"] = it
             }
 
             filter.startDate?.let {
-                queryConditions.add("yearMonth >= :startDate")
-                queryParameters["startDate"] = it
+                query.add("yearMonth >= :startDate")
+                parameters["startDate"] = it
             }
 
-            val authorIds = filter.authorName?.let { Author.findByName(it).mapNotNull { author -> author.id } }
-            authorIds?.takeIf { it.isNotEmpty() }?.let {
-                queryConditions.add("idAuthor in :authorIds")
-                queryParameters["authorIds"] = it
+            filter.authorName?.let { name ->
+                val authorIds = Author.findByName(name).mapNotNull { it.id }
+                if (authorIds.isNotEmpty()) {
+                    query.add("idAuthor in :authorIds")
+                    parameters["authorIds"] = authorIds
+                }
             }
 
-            return find(queryConditions.joinToString(" and "), queryParameters)
+            return find(query.toString(), parameters)
                 .page(filter.page, filter.pageSize)
         }
 
