@@ -6,11 +6,14 @@ import org.bson.types.ObjectId
 
 class ObjectIdValidator : ConstraintValidator<IdValid, String> {
     private var size: Int = 0
+    private var optional: Boolean = false
     override fun initialize(constraint: IdValid) {
         this.size = constraint.size
+        this.optional = constraint.optional
     }
 
     override fun isValid(value: String?, context: ConstraintValidatorContext): Boolean {
-        return value != null && value.length >= this.size && ObjectId.isValid(value)
+        if (optional && value.isNullOrBlank()) return true
+        return !value.isNullOrBlank() && value.length >= size && ObjectId.isValid(value)
     }
 }

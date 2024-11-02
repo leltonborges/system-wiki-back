@@ -9,6 +9,7 @@ import kotlin.reflect.KClass
 annotation class IdValid(
     val message: String = "Invalid expected size",
     val size: Int = 24,
+    val optional: Boolean = false,
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<*>> = []
 )

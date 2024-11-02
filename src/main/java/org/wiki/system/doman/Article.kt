@@ -42,7 +42,6 @@ class Article() : PanacheMongoEntity() {
             queryConditions.add("status = :status")
             queryParameters["status"] = status
 
-            val authorIds = filter.authorName?.let { Author.findByName(it).mapNotNull { author -> author.id } }
 
             filter.title?.let {
                 queryConditions.add("title like :title")
@@ -51,7 +50,7 @@ class Article() : PanacheMongoEntity() {
 
             filter.tagId?.let {
                 queryConditions.add("idTag = :tagId")
-                queryParameters["tagId"] = it
+                queryParameters["tagId"] = ObjectId(it)
             }
 
             filter.endDate.let {
@@ -64,6 +63,7 @@ class Article() : PanacheMongoEntity() {
                 queryParameters["startDate"] = it
             }
 
+            val authorIds = filter.authorName?.let { Author.findByName(it).mapNotNull { author -> author.id } }
             authorIds?.takeIf { it.isNotEmpty() }?.let {
                 queryConditions.add("idAuthor in :authorIds")
                 queryParameters["authorIds"] = it

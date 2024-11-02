@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull
 import jakarta.ws.rs.QueryParam
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter
 import org.wiki.system.util.formatYearMonth
+import org.wiki.system.validator.IdValid
 import org.wiki.system.validator.OptionalMinSizeValid
 import java.time.YearMonth
 
@@ -20,6 +21,7 @@ class FilterArticleParams : PageParams() {
 
     @QueryParam("tagId")
     @Parameter(description = "ID da tag")
+    @IdValid(optional = true, message = "TagID is invalid")
     var tagId: String? = null;
 
     @QueryParam("endDate")
