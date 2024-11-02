@@ -10,6 +10,8 @@ import org.bson.types.ObjectId
 import org.wiki.system.doman.Article
 import org.wiki.system.record.ArticleDataDetail
 import org.wiki.system.record.ArticleDataNew
+import org.wiki.system.resource.params.FilterArticleParams
+import org.wiki.system.resource.params.PageParams
 import org.wiki.system.resource.response.toPaginatedResponse
 import org.wiki.system.validator.IdValid
 import java.time.LocalDate
@@ -58,7 +60,7 @@ class ArticleResource {
             .build()
         article.also {
             it.title = newArticle.title
-            it.resume = newArticle.resume ?: ""
+            it.resume = newArticle.resume
             it.content = newArticle.content
             it.linkImg = newArticle.linkImg
             it.idAuthor = ObjectId(newArticle.idAuthor)
@@ -74,12 +76,9 @@ class ArticleResource {
     @Path("/list/all")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    fun listAll(
-        @QueryParam("page") page: Int = 0,
-        @QueryParam("size") pageSize: Int = 20
-    ): Response {
+    fun listAll(@BeanParam page: PageParams): Response {
         val response = Article.findAll()
-            .toPaginatedResponse(page, pageSize, Article::toDetail)
+            .toPaginatedResponse(page.page, page.pageSize, Article::toDetail)
         return Response.ok(response)
             .build();
     }
@@ -90,11 +89,12 @@ class ArticleResource {
     @Consumes(MediaType.APPLICATION_JSON)
     fun listAllByStatus(
         @PathParam("status") status: Int,
-        @QueryParam("page") page: Int = 0,
-        @QueryParam("size") pageSize: Int = 20
+        @Valid
+        @BeanParam
+        filter: FilterArticleParams
     ): Response {
-        val response = Article.findByStatus(status)
-            .toPaginatedResponse(page, pageSize, Article::toDetail)
+        val response = Article.findByStatusAndFilter(status, filter)
+            .toPaginatedResponse(filter.page, filter.pageSize, Article::toDetail)
         return Response.ok(response)
             .build();
     }
@@ -107,12 +107,11 @@ class ArticleResource {
         @Valid
         @Size(min = 5, message = "Tamanho mínimo esperado é de 5 caracteres")
         @QueryParam("keyword") keyword: String,
-        @QueryParam("page") page: Int = 0,
-        @QueryParam("size") size: Int = 10
+        @BeanParam page: PageParams
     ): Response {
         val articles =
             Article.findBySearch(keyword)
-                .toPaginatedResponse(page, size, Article::toDetail)
+                .toPaginatedResponse(page.page, page.pageSize, Article::toDetail)
         return Response.ok(articles)
             .build()
     }

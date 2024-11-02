@@ -14,8 +14,16 @@ class Author : PanacheMongoEntity() {
         return AuthorDataDetail(
             id = this.id!!,
             name,
-            email)
+            email
+        )
     }
 
-    companion object : PanacheMongoCompanion<Author> {}
+    companion object : PanacheMongoCompanion<Author> {
+        fun findByName(name: String): List<Author> {
+            val regex = "(?i).*${name}.*"
+            return find("{'name': {\$regex: ?1}}", regex)
+                .list()
+                .distinct()
+        }
+    }
 }
