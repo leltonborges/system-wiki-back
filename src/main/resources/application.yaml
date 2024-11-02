@@ -4,8 +4,9 @@ quarkus:
 
   http:
     cors:
-      ~: true
-      origins: /.*/
+      ~: ${CORS:false}
+      origins: ${CORS_ORIGINS}
+  #      origins: /.*/
 
   mongodb:
     connection-string: ${MONGODB_URL:mongodb://root:example@localhost:27017/system-wiki?authSource=admin}
