@@ -16,6 +16,9 @@ COPY --from=build --chown=185 /app/build/quarkus-app/*.jar /deployments/
 COPY --from=build --chown=185 /app/build/quarkus-app/app/ /deployments/app/
 COPY --from=build --chown=185 /app/build/quarkus-app/quarkus/ /deployments/quarkus/
 
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 EXPOSE 8080
 
 USER 185
@@ -23,4 +26,6 @@ USER 185
 ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
 ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
 
-ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+CMD ["/opt/jboss/container/java/run/run-java.sh"]
