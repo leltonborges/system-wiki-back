@@ -24,6 +24,9 @@ services:
 
   front:
     image: leltondev/system-wiki-front:1.1.0-nginx
+    environment:
+      API_ARTICLE_URL: http://${HOST_IP}:8080
+      PROD: true
     ports:
       - "80:80"
     networks:
@@ -32,8 +35,8 @@ services:
   back:
     image: leltondev/system-wiki-back:1.1.0-jvm
     environment:
-      QUARKUS_HTTP_CORS: true
-      QUARKUS_HTTP_CORS_ORIGINS: front
+      CORS: true
+      CORS_ORIGINS: /.*/
       MONGODB_URL: mongodb://root:example@mongo:27017/system-wiki?authSource=admin
       MONGODB_DATABASE: system-wiki
     ports:
