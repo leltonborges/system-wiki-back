@@ -16,8 +16,9 @@ COPY --from=build --chown=185 /app/build/quarkus-app/*.jar /deployments/
 COPY --from=build --chown=185 /app/build/quarkus-app/app/ /deployments/app/
 COPY --from=build --chown=185 /app/build/quarkus-app/quarkus/ /deployments/quarkus/
 
-COPY entrypoint.sh entrypoint.sh
-RUN chmod +x entrypoint.sh
+COPY entrypoint.sh /entrypoint.sh
+RUN ls -la /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 8080
 
