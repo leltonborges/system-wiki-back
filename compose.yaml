@@ -22,17 +22,17 @@ services:
     networks:
       - system-wiki
 
-  front:
+  frontend:
     image: leltondev/system-wiki-front:1.1.0-nginx
     environment:
-      API_ARTICLE_URL: http://${HOST_IP}:8080
+      API_ARTICLE_URL: http://backend:8080
       PROD: true
     ports:
       - "80:80"
     networks:
       - system-wiki
 
-  back:
+  backend:
     image: leltondev/system-wiki-back:1.1.0-jvm
     environment:
       CORS: true
