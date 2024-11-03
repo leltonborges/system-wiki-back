@@ -3,7 +3,7 @@ FROM gradle:jdk21-graal-jammy AS build
 WORKDIR /app
 
 COPY . .
-
+RUN chmod +x gradlew
 RUN ./gradlew clean build
 
 FROM registry.access.redhat.com/ubi8/openjdk-21:1.20 AS run
