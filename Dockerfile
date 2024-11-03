@@ -10,7 +10,7 @@ RUN ./gradlew clean build
 FROM registry.access.redhat.com/ubi8/openjdk-21-runtime:1.20 AS run
 
 ENV LANGUAGE='en_US:en'
-USER 100
+# USER 100
 
 COPY --from=build --chown=185 /app/build/quarkus-app/lib/ /deployments/lib/
 COPY --from=build --chown=185 /app/build/quarkus-app/*.jar /deployments/
