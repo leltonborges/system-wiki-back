@@ -15,7 +15,7 @@ COPY --from=build --chown=185 /app/build/quarkus-app/lib/ /deployments/lib/
 COPY --from=build --chown=185 /app/build/quarkus-app/*.jar /deployments/
 COPY --from=build --chown=185 /app/build/quarkus-app/app/ /deployments/app/
 COPY --from=build --chown=185 /app/build/quarkus-app/quarkus/ /deployments/quarkus/
-RUN mkdir -p /usr/local/share/ca-certificates/
+
 EXPOSE 8080
 
 USER 185
