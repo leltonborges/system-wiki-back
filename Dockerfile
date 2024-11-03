@@ -1,4 +1,4 @@
-FROM gradle:jdk21-graal-jammy AS BUILD
+FROM gradle:jdk21-graal-jammy AS build
 
 WORKDIR /app
 
@@ -6,14 +6,14 @@ COPY . .
 
 RUN ./gradlew clean build
 
-FROM registry.access.redhat.com/ubi8/openjdk-21:1.20 AS PROD
+FROM registry.access.redhat.com/ubi8/openjdk-21:1.20 AS run
 
 ENV LANGUAGE='en_US:en'
 
-COPY --from=BUILD --chown=185 /app/build/quarkus-app/lib/ /deployments/lib/
-COPY --from=BUILD --chown=185 /app/build/quarkus-app/*.jar /deployments/
-COPY --from=BUILD --chown=185 /app/build/quarkus-app/app/ /deployments/app/
-COPY --from=BUILD --chown=185 /app/build/quarkus-app/quarkus/ /deployments/quarkus/
+COPY --from=build --chown=185 /app/build/quarkus-app/lib/ /deployments/lib/
+COPY --from=build --chown=185 /app/build/quarkus-app/*.jar /deployments/
+COPY --from=build --chown=185 /app/build/quarkus-app/app/ /deployments/app/
+COPY --from=build --chown=185 /app/build/quarkus-app/quarkus/ /deployments/quarkus/
 
 EXPOSE 8080
 USER 185
