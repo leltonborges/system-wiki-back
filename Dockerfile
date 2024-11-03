@@ -16,8 +16,6 @@ COPY --from=build --chown=185 /app/build/quarkus-app/*.jar /deployments/
 COPY --from=build --chown=185 /app/build/quarkus-app/app/ /deployments/app/
 COPY --from=build --chown=185 /app/build/quarkus-app/quarkus/ /deployments/quarkus/
 
-RUN keytool -importcert -file /usr/local/share/ca-certificates/mongodb-cert.crt -alias mongodb-ca -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit -noprompt
-
 EXPOSE 8080
 
 USER 185
