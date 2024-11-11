@@ -47,6 +47,22 @@ class ArticleResource {
 
 
     @PUT
+    @Path("/{id}/disable")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    fun disableById(
+        @Valid
+        @IdValid
+        @PathParam("id") id: String
+    ): Response {
+        val article = Article.findById(ObjectId(id)) ?: return Response.status(Response.Status.NOT_FOUND).build()
+        article.status = 0
+        article.update()
+        return Response.ok(Response.Status.NO_CONTENT).build()
+    }
+
+
+    @PUT
     @Path("/{id}/update")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
