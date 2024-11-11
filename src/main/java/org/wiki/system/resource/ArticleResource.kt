@@ -10,6 +10,7 @@ import org.bson.types.ObjectId
 import org.wiki.system.doman.Article
 import org.wiki.system.record.ArticleDataDetail
 import org.wiki.system.record.ArticleDataNew
+import org.wiki.system.record.StatusUpdateRequest
 import org.wiki.system.resource.params.FilterArticleParams
 import org.wiki.system.resource.params.PageParams
 import org.wiki.system.resource.response.toPaginatedResponse
@@ -46,18 +47,22 @@ class ArticleResource {
     }
 
 
-    @PUT
-    @Path("/{id}/disable")
+    @PATCH
+    @Path("/{id}/change/status")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    fun disableById(
+    fun changeStatusArticle(
         @Valid
         @IdValid
-        @PathParam("id") id: String
+        @PathParam("id") id: String,
+        @Valid
+        request: StatusUpdateRequest
     ): Response {
         val article = Article.findById(ObjectId(id)) ?: return Response.status(Response.Status.NOT_FOUND).build()
-        article.status = 0
+
+        article.status = request.newStatus.code
         article.update()
+
         return Response.ok(Response.Status.NO_CONTENT).build()
     }
 
