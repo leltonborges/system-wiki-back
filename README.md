@@ -1,78 +1,18 @@
-# code-with-quarkus
+# System Wiki - CS /UDF
+## Descrição do Projeto
+<p align="center"> O Sistema de Wiki faz parte de um projeto acadêmico swolicitado pela Prof. Kadidja da disciplina "Projeto de Linguagem de Programação"
+do 7º semestre do curso de Ciências da Computação do Centro Universitario do Distrito Federal(UDF). Este sistema foi pensado para facilitar o acesso a informações
+acadêmicas, oferecendo um espaço único onde estudantes e professores possam consultar e organizar conteúdos sobre tecnologias e fereamentas do ambiente acadêmico.
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+## Integrantes: 
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+- **[Suelen Barbosa Marinho](https://github.com/suelenmarinho)**
+- **[Lelton Pereira Borges](https://github.com/leltonborges)**
 
-## Running the application in dev mode
+ ## Tecnologias 
 
-You can run your application in dev mode that enables live coding using:
-
-```shell script
-./gradlew quarkusDev
-```
-
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
-
-## Packaging and running the application
-
-The application can be packaged using:
-
-```shell script
-./gradlew build
-```
-
-It produces the `quarkus-run.jar` file in the `build/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `build/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar build/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./gradlew build -Dquarkus.package.jar.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar build/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./gradlew build -Dquarkus.native.enabled=true
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./gradlew build -Dquarkus.native.enabled=true -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./build/code-with-quarkus-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/gradle-tooling>.
-
-## Related Guides
-
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- MongoDB client ([guide](https://quarkus.io/guides/mongodb)): Connect to MongoDB in either imperative or reactive style
-- REST JSON-B ([guide](https://quarkus.io/guides/rest#json-serialisation)): JSON-B serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- YAML Configuration ([guide](https://quarkus.io/guides/config-yaml)): Use YAML to configure your Quarkus application
-- MongoDB with Panache for Kotlin ([guide](https://quarkus.io/guides/mongodb-panache-kotlin)): Simplify your persistence code for MongoDB in Kotlin via the active record or the repository pattern
-
-## Provided Code
-
-### YAML Config
-
-Configure your application with YAML
-
-[Related guide section...](https://quarkus.io/guides/config-reference#configuration-examples)
-
-The Quarkus application configuration is located in `src/main/resources/application.yml`.
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+  As seguintes ferramentas foram ultilizadas para o Back-end:
+  
+  - [Kotlin](https://kotlinlang.org/)
+  - [Framework Quarkus](https://quarkus.io/)
+  - [ORM Panache](https://pt.quarkus.io/guides/hibernate-orm-panache)
