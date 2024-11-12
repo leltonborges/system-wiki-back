@@ -112,7 +112,7 @@ quarkus:
 
   http:
     cors:
-      enabled: ${CORS:true}
+      ~: ${CORS:true}
       origins: ${CORS_ORIGINS:/.*/}
 
   mongodb:
