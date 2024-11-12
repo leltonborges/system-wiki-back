@@ -16,15 +16,6 @@ professores possam consultar e organizar conteúdos sobre tecnologias e ferramen
 
 ## Tecnologias
 
-### Frontend
-
-As seguintes ferramentas foram utilizadas no desenvolvimento do Frontend:
-
-- **Angular**
-- **PrimeNG**
-
-### Backend
-
 As seguintes ferramentas foram utilizadas no Backend:
 
 - [Kotlin](https://kotlinlang.org/)
