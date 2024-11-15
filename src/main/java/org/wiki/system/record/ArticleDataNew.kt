@@ -50,7 +50,7 @@ class ArticleDataNew {
 
         return Article().apply {
             this.title = this@ArticleDataNew.title
-            this.resume = this@ArticleDataNew.resume ?: ""
+            this.resume = this@ArticleDataNew.resume
             this.content = this@ArticleDataNew.content
             this.linkImg = this@ArticleDataNew.linkImg
             this.idAuthor = authorId

@@ -14,8 +14,10 @@ import org.wiki.system.record.StatusUpdateRequest
 import org.wiki.system.resource.params.FilterArticleParams
 import org.wiki.system.resource.params.PageParams
 import org.wiki.system.resource.response.toPaginatedResponse
+import org.wiki.system.util.formatYearMonth
 import org.wiki.system.validator.IdValid
 import java.time.LocalDate
+import java.time.YearMonth
 
 @Path("/article")
 class ArticleResource {
@@ -87,6 +89,7 @@ class ArticleResource {
             it.idAuthor = ObjectId(newArticle.idAuthor)
             it.idTag = ObjectId(newArticle.idTag)
             it.dtLastUpdate = LocalDate.now()
+            it.yearMonth = formatYearMonth(YearMonth.now())
         }
         article.update()
         return Response.ok(ArticleDataDetail(article))

@@ -71,7 +71,7 @@ class Article() : PanacheMongoEntity() {
                 }
             }
 
-            return find(query.toString(), parameters)
+            return find(query.toString().plus(" order by yearMonth desc"), parameters)
                 .page(filter.page, filter.pageSize)
         }
 
