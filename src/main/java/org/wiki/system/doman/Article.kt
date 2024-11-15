@@ -5,6 +5,8 @@ import io.quarkus.mongodb.panache.common.MongoEntity
 import io.quarkus.mongodb.panache.kotlin.PanacheMongoCompanion
 import io.quarkus.mongodb.panache.kotlin.PanacheMongoEntity
 import io.quarkus.mongodb.panache.kotlin.PanacheQuery
+import io.quarkus.panache.common.Sort
+import io.quarkus.panache.common.Sort.Direction
 import org.bson.types.ObjectId
 import org.wiki.system.record.ArticleDataDetail
 import org.wiki.system.resource.params.FilterArticleParams
@@ -71,7 +73,9 @@ class Article() : PanacheMongoEntity() {
                 }
             }
 
-            return find(query.toString().plus(" order by yearMonth desc"), parameters)
+            val sort = Sort.by("yearMonth", Direction.Descending)
+                .and("dtLastUpdate", Direction.Descending)
+            return find(query.toString(), sort, parameters)
                 .page(filter.page, filter.pageSize)
         }
 
